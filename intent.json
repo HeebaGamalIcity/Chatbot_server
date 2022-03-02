@@ -1,0 +1,97 @@
+{"first_respond": [
+	{"tag": "start",
+         "patterns": ["start"],
+         "responses": ["They call me Bot X, I can help you in your questions, complains, activations and get info",
+                       "I usually go by Bot X,I can help you in your questions, complains, activations and get info",
+                       "My name is the Bot X, I can help you in your questions, complains, activations and get info"],
+         "context": [""]
+        },
+        {"tag": "greeting",
+         "patterns": ["how are you", "is anyone there?","hey","hola", "hello", "good day", "hi"],
+         "responses": ["Hello, thanks for asking", "Hello", "Hi there, How can I help?"],
+         "context": [""]
+        },
+        {"tag": "goodbye",
+         "patterns": ["bye", "see you later", "goodbye", "nice chatting to you, bye", "till next time"],
+         "responses": ["See you!", "Have a nice day", "Bye! Come back again soon."],
+         "context": [""]
+        },
+        {"tag": "question",
+         "patterns": ["question", "i want to ask a question",  "yes, i want to ask a question"],
+         "responses":["what do you want to ask?","what is your question?"],
+         "context": [""]
+        },
+        {"tag": "complain",
+         "patterns":  ["complain", "i want to complain",  "yes, i want to complain"],
+         "responses": ["what is your complain?"],
+         "context":   [""]
+        },
+        {"tag": "activation",
+         "patterns": ["activation", "i want to activation my card", "yes, i want to activation"],
+         "responses": ["Could you want to activate your new card"],
+         "context": [""]
+        },
+        {"tag": "info",
+         "patterns": ["new account" ,"how to open a new account", "Open account", "what i should do to open new account", "what do i need to have a new account"],
+         "responses": ["to open a new account you should over 21 years old, you should have a national ID and have a work"],
+         "context": [""]
+        },
+        {"tag": "defult",
+         "patterns": ["" ],
+         "responses": ["Sorry, can't understand you", "Please give me more info", "Not sure I understand"],
+         "context": [""]
+        }
+   ],
+   
+"question": [
+	{"tag": "question_credit",
+	 "patterns":  ["what is my credit", "what is credit", "how much in my account"],
+	 "responses": ["Could you enter your info {name, national ID, mobile number, birthdate}"],
+	 "context": [""]
+	},
+	{"tag": "data",
+	 "patterns":  [" "],
+	 "responses": ["your account contain 10 thousand"],
+	 "context": [""]
+	},
+        {"tag": "defult",
+         "patterns": ["" ],
+         "responses": ["Sorry, can't understand you", "Please give me more info", "Not sure I understand"],
+         "context": [""]
+        }
+   ],
+"complain": [
+	{"tag": "complain_stopped",
+	 "patterns":  ["card stopped", "card stop", "my credit card does not work", "my card stopped", "my card does not work"],
+	 "responses": ["I will guide you to activate your card, but first Could you enter your info {name, national ID, mobile number, birthdate}"],
+	 "context": [""]
+	},
+	{"tag": "data_complain",
+	 "patterns":  [" "],
+	 "responses": ["your card now activated"],
+	 "context": [""]
+	},
+        {"tag": "defult",
+         "patterns": [""],
+         "responses": ["Sorry, can't understand you", "Please give me more info", "Not sure I understand"],
+         "context": [""]
+        }
+],
+"activation": [
+	{"tag": "activation_card",
+	 "patterns":  ["my new credit card does not work", "my card not activated", "my new card does not work"],
+	 "responses": ["I will guide you to activate your new card, but first Could you enter your info {name, national ID, mobile number, birthdate}"],
+	 "context": [""]
+	},
+	{"tag": "data_activation",
+	 "patterns":  [" "],
+	 "responses": ["your new card now activated"],
+	 "context": [""]
+	},
+        {"tag": "defult",
+         "patterns": ["" ],
+         "responses": ["Sorry, can't understand you", "Please give me more info", "Not sure I understand"],
+         "context": [""]
+        }
+   ]
+}
