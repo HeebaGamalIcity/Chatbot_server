@@ -12,6 +12,9 @@ lemmatizer = WordNetLemmatizer()
 
 
 def clean_up_sentence(sentence):
+    print('test')
+    print(sentence)
+    print('test')
     # tokenize the pattern - split words into array
     sentence_words = nltk.word_tokenize(sentence)
     # stem each word - create short form for word
@@ -26,7 +29,7 @@ def bow(sentence, words, show_details=True):
     # bag of words - matrix of N words, vocabulary matrix
     bag = [0]*len(words)
     for s in sentence_words:
-        for i,w in enumerate(words):
+        for i, w in enumerate(words):
             if w == s:
                 # assign 1 if current word is in the vocabulary position
                 bag[i] = 1
@@ -48,9 +51,18 @@ def predict_class(sentence, model, words, classes):
         return_list.append({"intent": classes[r[0]], "probability": str(r[1])})
     return return_list
 
-def get_response(sentence, model, intents, words, classes):
+finail_resp = { "سؤال_الرصيد": "رصيد حسابك الحالي 10 ألاف جنيه",
+                "question_credit" : "your account contain 10 thousand Egyptian pound",
+                "شكوي توقف":"لقد تم إعادة تفعيل الكارت الخاص بك",
+                "complain_stopped" : "Your card has been reactivated",
+                "تفعيل": "لقد تم تفعيل الكارت الخاص بك",
+                "activation_card":"Your card has been activated"}
+
+def get_response(sentence, model, intents, words, classes, reversed_tag, final_tag):
     tag = predict_class(sentence, model, words, classes)[0]['intent']
     for key in intents:
         for intent in intents[key]:
+            if final_tag:
+                return finail_resp[reversed_tag], " ", False
             if intent['tag'] == tag:
-                return intent['responses'][0]
+                return random.choice(intent['responses']), intent['tag'] , (intent['tag']  in finail_resp)
