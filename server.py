@@ -1,6 +1,8 @@
 import nltk
-nltk.download('words')
-nltk.download('punkt')
+# nltk.download('words')
+# nltk.download('punkt')
+nltk.download('wordnet')
+nltk.download('omw-1.4')
 from flask import Flask, request, jsonify, send_from_directory, send_file
 from speech.speech_to_text import arabic_text, english_text, get_arabic_model
 from speech.text_to_speech import english_speech, get_ts_model
@@ -47,27 +49,15 @@ tacotron2 = bundle.get_tacotron2().to(device)
 vocoder = bundle.get_vocoder().to(device)
 
 
-# @app.route("/speech", methods=["POST"])
-# def get_speech():
-#     speech_arr = request.form.get('array')
-#     speech_arr = np.array(speech_arr)
-#     print(type(speech_arr))
-#     print(speech_arr)
-#     data, samplerate = sf.read('piano.wav')  # mono signal
-#     sf.write(data, 'new_file.ogg', samplerate=samplerate)
-#     sf.write('sound.wav', speech_arr, 16000)
-#
-#     # samplerate = 16000
-#     # write("example.wav", samplerate, speech_arr)
-#
-#     lang = request.headers['lang']
-#
-#
-#     # transcript = model_sr.transcribe('test.wav')
-#     # print(transcript)
-#     # file.save('test.wav')
-#     # return send_from_directory('', 'test.wav', as_attachment=True)
-#     return jsonify({"message": "doner"})
+reversed_tag = ""
+ref_tag = False
+
+finail_resp = { "سؤال_الرصيد": "رصيد حسابك الحالي 10 ألاف جنيه",
+                "question_credit" : "your account contain 10 thousand Egyptian pound",
+                "شكوي توقف":"لقد تم إعادة تفعيل الكارت الخاص بك",
+                "complain_stopped" : "Your card has been reactivated",
+                "تفعيل": "لقد تم تفعيل الكارت الخاص بك",
+                "activation_card":"Your card has been activated"}
 
 
 
@@ -75,76 +65,46 @@ vocoder = bundle.get_vocoder().to(device)
 def send_file(path):
     return send_from_directory('', path)
 
+
 @app.route("/speech", methods=["POST"])
 def get_speech():
     file = request.files['file']
     lang = request.headers['lang']
     file.save('demo.wav')
+    global reversed_tag, ref_tag
+
+
     if lang == "ar":
         trans = arabic_text(model_sr)
-        bot_response = get_response(trans, model=ar_chatbot_model, intents=ar_intents, words=ar_words,
-                                    classes=ar_classes)
-        model_tts_ar.synthesize(bot_response)
+
+        bot_response, reversed_tag, ref_tag = get_response(trans, model=ar_chatbot_model, intents=ar_intents, words=ar_words,
+                                    classes=ar_classes  , reversed_tag=reversed_tag, final_tag=ref_tag)
+        model_tts_ar.synthesize(bot_response)#"أَسَفٌ لَمْ أَسْتَطِيعَ فَهْمُكَ")
 
 
     elif lang == "en":
-        trans = english_text()
-        bot_response = get_response(trans, model=en_chatbot_model, intents=en_intents, words=en_words,
-                                    classes=en_classes)
+        trans = english_text(model=model_sr_en, processor=processor_sr_en)
+        bot_response, reversed_tag, ref_tag = get_response(trans, model=en_chatbot_model, intents=en_intents, words=en_words,
+                                    classes=en_classes , reversed_tag=reversed_tag, final_tag=ref_tag)
         waveforms = english_speech(device, processor, tacotron2, vocoder, bot_response)
         torchaudio.save("demo.wav", waveforms[0:1].cpu(), sample_rate=vocoder.sample_rate)
 
-    return jsonify({"message":"http://192.168.1.20:5000/files/demo.wav"})
+    return jsonify({"message":"http://192.168.1.20:5000/files/sample.wav"})
 
 
 @app.route("/text", methods=["POST"])
 def get_text():
+    global reversed_tag, ref_tag
     text = request.form.get('text')
     lang = request.headers['lang']
-    bot_response = get_response(text, model=ar_chatbot_model, intents=ar_intents, words=ar_words, classes=ar_classes)
+    bot_response = ""
+    print(reversed_tag)
+    if lang == 'ar':
+        bot_response, reversed_tag, ref_tag = get_response(text, model=ar_chatbot_model, intents=ar_intents, words=ar_words,classes=ar_classes, reversed_tag=reversed_tag, final_tag=ref_tag)
     if lang == "en":
-        bot_response = get_response(text, model=en_chatbot_model, intents=en_intents, words=en_words, classes=en_classes)
+        bot_response, reversed_tag, ref_tag  = get_response(text, model=en_chatbot_model, intents=en_intents, words=en_words,
+                                    classes=en_classes , reversed_tag=reversed_tag, final_tag=ref_tag)
     return jsonify({"message":bot_response})
 
-# #beeb beeb
-# @app.route("/speech_en", methods=["POST"])
-# def get_speech_en():
-#     file = request.files['file']
-#     file.save('./test.wav')
-#
-#     speech_array, sampling_rate = librosa.load('./test.wav', sr=16_000)
-#     inputs = processor_sr_en(speech_array, sampling_rate=16_000, return_tensors="pt", padding=True)
-#     with torch.no_grad():
-#         logits = model_sr_en(inputs.input_values, attention_mask=inputs.attention_mask).logits
-#     predicted_ids = torch.argmax(logits, dim=-1)
-#     predicted_sentences = processor_sr_en.batch_decode(predicted_ids)
-#
-#     print(predicted_sentences)
-#     return jsonify({"message":predicted_sentences})
-#
-# @app.route("/tts_ar", methods=["POST"])
-# def get_text_ar():
-#     text = request.form.get('data')
-#     print(text)
-#     model_tts_ar.synthesize(text)
-#
-#     return jsonify({"message":"done"})
-#
-#
-# @app.route("/tts_en", methods=["POST"])
-# def get_text_en():
-#     file = request.form.get('data')
-#
-#     with torch.inference_mode():
-#         processed, lengths = processor(file)
-#         processed = processed.to(device)
-#         lengths = lengths.to(device)
-#         spec, spec_lengths, _ = tacotron2.infer(processed, lengths)
-#         waveforms, lengths = vocoder(spec, spec_lengths)
-#
-#     torchaudio.save("output_wavernn.wav", waveforms[0:1].cpu(), sample_rate=vocoder.sample_rate)
-#     IPython.display.display(IPython.display.Audio("output_wavernn.wav"))
-#
-#     return jsonify({"message":'done'})
 if __name__ == "__main__":
     app.run(debug=False, host='0.0.0.0')
