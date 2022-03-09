@@ -89,7 +89,7 @@ def get_speech():
         waveforms = english_speech(device, processor, tacotron2, vocoder, bot_response)
         torchaudio.save("demo.wav", waveforms[0:1].cpu(), sample_rate=vocoder.sample_rate)
 
-    return jsonify({"message":"http://192.168.1.20:5000/files/sample.wav"})
+    return jsonify({"message":"http://209.51.170.248:5000/files/sample.wav"})
 
 
 @app.route("/text", methods=["POST"])
