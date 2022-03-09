@@ -8,12 +8,12 @@
         },
         {"tag": "greeting",
          "patterns": ["how are you", "is anyone there?","hey","hola", "hello", "good day", "hi"],
-         "responses": ["Hello, thanks for asking", "Hello", "Hi there, How can I help?"],
+         "responses": ["Hello, thanks for asking", "Hi, thanks for asking, I wish you have a nice day :)"],
          "context": [""]
         },
         {"tag": "goodbye",
          "patterns": ["bye", "see you later", "goodbye", "nice chatting to you, bye", "till next time"],
-         "responses": ["See you!", "Have a nice day", "Bye! Come back again soon."],
+         "responses": ["See you! Come back again soon.", "Have a nice day, Come back again soon.", "Bye! Come back again soon."],
          "context": [""]
         },
         {"tag": "question",
@@ -26,11 +26,7 @@
          "responses": ["what is your complain?"],
          "context":   [""]
         },
-        {"tag": "activation",
-         "patterns": ["activation", "i want to activation my card", "yes, i want to activation"],
-         "responses": ["Could you want to activate your new card"],
-         "context": [""]
-        },
+        
         {"tag": "info",
          "patterns": ["new account" ,"how to open a new account", "Open account", "what i should do to open new account", "what do i need to have a new account"],
          "responses": ["to open a new account you should over 21 years old, you should have a national ID and have a work"],
@@ -45,53 +41,25 @@
    
 "question": [
 	{"tag": "question_credit",
-	 "patterns":  ["what is my credit", "what is credit", "how much in my account"],
-	 "responses": ["Could you enter your info {name, national ID, mobile number, birthdate}"],
+	 "patterns":  ["what is my credit", "what is credit", "how much in my account", "How much money in my bank account", "How much do I owe in my bank account", "What is my credit","Can I know what is my balance in my credit account?", "I want to know how much money in my account now?", "Please I would like to know my balance", "can I ask about my balance in my account", "I want to know my balanc", "May i know my bank account balance", "I would like to know my account balance ?", " Please tell me my current balance", "Please I wanna know my bank balance, can you tell me?", "Kindly can I ask about my account balance", "please can you tell me the balance in my account?"],
+	 "responses": ["with pleasure, To know your credit, enter your information, which is the national id."],
 	 "context": [""]
-	},
-	{"tag": "data",
-	 "patterns":  [" "],
-	 "responses": ["your account contain 10 thousand"],
-	 "context": [""]
-	},
-        {"tag": "defult",
-         "patterns": ["" ],
-         "responses": ["Sorry, can't understand you", "Please give me more info", "Not sure I understand"],
-         "context": [""]
-        }
+	}
    ],
 "complain": [
 	{"tag": "complain_stopped",
-	 "patterns":  ["card stopped", "card stop", "my credit card does not work", "my card stopped", "my card does not work"],
-	 "responses": ["I will guide you to activate your card, but first Could you enter your info {name, national ID, mobile number, birthdate}"],
+	 "patterns":  ["card stopped", "card stop", "my credit card does not work", "my card stopped", "my card does not work", "Why my card is suspended","My debit card is deactivated", "Why my Visa stopped", "Why my atm stopped", "My credit card is not working so I want to make a complain", "My card is stopped suddenly , I want to the reasons and how to solve this asap", "What is the reason that my card is stopped", "my card is suspended, how to reactivate it again?", "I have a problem , my credited card stoped", "My credit card is not working", "I would like to know why my credit card is suspended", "Please my ATM not active", "I can't use my card, there is a problem when I used it", "My ATM card stopped for working, can you help please?", "I wanna make a complaint that my visa card is suspended", "complain", "i want to complain",  "yes, i want to complain"],
+	 "responses": ["wait a while to know the reason of stopped, I will guide you to fix the problem and reactivate your card, but first enter your information, which is the national id."],
 	 "context": [""]
-	},
-	{"tag": "data_complain",
-	 "patterns":  [" "],
-	 "responses": ["your card now activated"],
-	 "context": [""]
-	},
-        {"tag": "defult",
-         "patterns": [""],
-         "responses": ["Sorry, can't understand you", "Please give me more info", "Not sure I understand"],
-         "context": [""]
-        }
+	}
 ],
 "activation": [
 	{"tag": "activation_card",
-	 "patterns":  ["my new credit card does not work", "my card not activated", "my new card does not work"],
-	 "responses": ["I will guide you to activate your new card, but first Could you enter your info {name, national ID, mobile number, birthdate}"],
+	 "patterns":  ["my new credit card does not work", "my card not activated", "my new card does not work", "activation", "i want to activation my card", "yes, i want to activation", "How to activate my new bank card","I want to create a deposit account and activate my debit card","Please I want to active my credit card","How can I activate my card ,it's my first time to use?", "I want to activate my card", "I want to activate my new account",  "i want to activation my new card", "yes, i want to a new activation","I want to create a deposit account and activate my new debit card","Please I want to active my new credit card"],
+	 "responses": ["I will guide you to activate your new card, but first enter your information, which is the national id."],
 	 "context": [""]
-	},
-	{"tag": "data_activation",
-	 "patterns":  [" "],
-	 "responses": ["your new card now activated"],
-	 "context": [""]
-	},
-        {"tag": "defult",
-         "patterns": ["" ],
-         "responses": ["Sorry, can't understand you", "Please give me more info", "Not sure I understand"],
-         "context": [""]
-        }
+	}
    ]
 }
+
+
