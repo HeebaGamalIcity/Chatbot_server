@@ -58,11 +58,14 @@ finail_resp = { "سؤال_الرصيد": "رصيد حسابك الحالي 10 أ
                 "تفعيل": "لقد تم تفعيل الكارت الخاص بك",
                 "activation_card":"Your card has been activated"}
 
-def get_response(sentence, model, intents, words, classes, reversed_tag, final_tag):
+def get_response(sentence, model, intents, words, classes, reversed_tag, final_tag, T):
     tag = predict_class(sentence, model, words, classes)[0]['intent']
     for key in intents:
         for intent in intents[key]:
             if final_tag:
                 return finail_resp[reversed_tag], " ", False
-            if intent['tag'] == tag:
+
+            if intent['tag'] == tag and T == False:
                 return random.choice(intent['responses']), intent['tag'] , (intent['tag']  in finail_resp)
+            elif intent['tag'] == tag and T == True:
+                return random.choice(intent['responses_T']), intent['tag'] , (intent['tag']  in finail_resp)
