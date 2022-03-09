@@ -78,14 +78,14 @@ def get_speech():
         trans = arabic_text(model_sr)
 
         bot_response, reversed_tag, ref_tag = get_response(trans, model=ar_chatbot_model, intents=ar_intents, words=ar_words,
-                                    classes=ar_classes  , reversed_tag=reversed_tag, final_tag=ref_tag)
+                                    classes=ar_classes  , reversed_tag=reversed_tag, final_tag=ref_tag, T = True)
         model_tts_ar.synthesize(bot_response)#"أَسَفٌ لَمْ أَسْتَطِيعَ فَهْمُكَ")
 
 
     elif lang == "en":
         trans = english_text(model=model_sr_en, processor=processor_sr_en)
         bot_response, reversed_tag, ref_tag = get_response(trans, model=en_chatbot_model, intents=en_intents, words=en_words,
-                                    classes=en_classes , reversed_tag=reversed_tag, final_tag=ref_tag)
+                                    classes=en_classes , reversed_tag=reversed_tag, final_tag=ref_tag,T = False)
         waveforms = english_speech(device, processor, tacotron2, vocoder, bot_response)
         torchaudio.save("demo.wav", waveforms[0:1].cpu(), sample_rate=vocoder.sample_rate)
 
@@ -100,10 +100,11 @@ def get_text():
     bot_response = ""
     print(reversed_tag)
     if lang == 'ar':
-        bot_response, reversed_tag, ref_tag = get_response(text, model=ar_chatbot_model, intents=ar_intents, words=ar_words,classes=ar_classes, reversed_tag=reversed_tag, final_tag=ref_tag)
+        bot_response, reversed_tag, ref_tag = get_response(text, model=ar_chatbot_model, intents=ar_intents, words=ar_words,
+                                                           classes=ar_classes, reversed_tag=reversed_tag, final_tag=ref_tag, T = False)
     if lang == "en":
         bot_response, reversed_tag, ref_tag  = get_response(text, model=en_chatbot_model, intents=en_intents, words=en_words,
-                                    classes=en_classes , reversed_tag=reversed_tag, final_tag=ref_tag)
+                                    classes=en_classes , reversed_tag=reversed_tag, final_tag=ref_tag, T = False)
     return jsonify({"message":bot_response})
 
 if __name__ == "__main__":
