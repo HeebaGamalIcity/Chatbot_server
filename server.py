@@ -112,7 +112,7 @@ def get_speech():
 
         torchaudio.save("sample.wav", wav.unsqueeze(0).cpu(), sample_rate=19000)
 
-    return jsonify({"message":"http://209.51.170.248:5000/files/sample.wav"})
+    return jsonify({"message":"http://184.105.3.113:5000/files/sample.wav"})
 
 
 @app.route("/text", methods=["POST"])
