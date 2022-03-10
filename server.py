@@ -90,7 +90,7 @@ def send_file(path):
 def get_speech():
     file = request.files['file']
     lang = request.headers['lang']
-    file.save('demo.wav')
+    file.save('test.wav')
     global reversed_tag, ref_tag
 
 
@@ -110,7 +110,7 @@ def get_speech():
         with torch.no_grad():
                 wav = text2speech(bot_response)["wav"]
 
-        torchaudio.save("demo.wav", wav.unsqueeze(0).cpu(), sample_rate=19000)
+        torchaudio.save("sample.wav", wav.unsqueeze(0).cpu(), sample_rate=19000)
 
     return jsonify({"message":"http://209.51.170.248:5000/files/sample.wav"})
 
