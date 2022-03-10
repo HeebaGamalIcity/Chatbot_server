@@ -108,8 +108,9 @@ def get_speech():
                                     classes=en_classes , reversed_tag=reversed_tag, final_tag=ref_tag,T = False)
         #waveforms = english_speech(device, processor, tacotron2, vocoder, bot_response)
         with torch.no_grad():
-	    wav = text2speech(bot_response)["wav"]
-	torchaudio.save("demo.wav", wav.unsqueeze(0).cpu(), sample_rate=19000)
+                wav = text2speech(bot_response)["wav"]
+
+        torchaudio.save("demo.wav", wav.unsqueeze(0).cpu(), sample_rate=19000)
 
     return jsonify({"message":"http://209.51.170.248:5000/files/sample.wav"})
 
