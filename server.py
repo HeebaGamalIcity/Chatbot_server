@@ -103,7 +103,7 @@ def get_speech():
 
 
     elif lang == "en":
-        trans = english_text(model=model_sr_en, processor=processor_sr_en)
+        trans = english_text(model=model_sr_en, processor=processor_sr_en)[0]
         bot_response, reversed_tag, ref_tag = get_response(trans, model=en_chatbot_model, intents=en_intents, words=en_words,
                                     classes=en_classes , reversed_tag=reversed_tag, final_tag=ref_tag,T = False)
         #waveforms = english_speech(device, processor, tacotron2, vocoder, bot_response)
