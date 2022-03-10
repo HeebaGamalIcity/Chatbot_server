@@ -72,7 +72,7 @@ text2speech = Text2Speech.from_pretrained(
 reversed_tag = ""
 ref_tag = False
 
-finail_resp = { "سؤال_الرصيد": "رصيد حسابك الحالي 10 ألاف جنيه",
+finail_resp = { "سؤال_الرصيد": "رصيد حسابك الحالي عشرة ألاف جنيه",
                 "question_credit" : "your account contain 10 thousand Egyptian pound",
                 "شكوي توقف":"لقد تم إعادة تفعيل الكارت الخاص بك",
                 "complain_stopped" : "Your card has been reactivated",
