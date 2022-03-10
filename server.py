@@ -6,6 +6,8 @@ nltk.download('omw-1.4')
 from flask import Flask, request, jsonify, send_from_directory, send_file
 from speech.speech_to_text import arabic_text, english_text, get_arabic_model
 from speech.text_to_speech import english_speech, get_ts_model
+from espnet2.bin.tts_inference import Text2Speech
+from espnet2.utils.types import str_or_none
 # from IPython.display import Audio
 # from datasets import load_dataset
 from transformers import Wav2Vec2ForCTC, Wav2Vec2Processor
@@ -43,11 +45,29 @@ model_tts_ar= get_ts_model()
 # #text
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
-bundle = torchaudio.pipelines.TACOTRON2_WAVERNN_PHONE_LJSPEECH
-processor = bundle.get_text_processor()
-tacotron2 = bundle.get_tacotron2().to(device)
-vocoder = bundle.get_vocoder().to(device)
+# bundle = torchaudio.pipelines.TACOTRON2_WAVERNN_PHONE_LJSPEECH
+# processor = bundle.get_text_processor()
+# tacotron2 = bundle.get_tacotron2().to(device)
+# vocoder = bundle.get_vocoder().to(device)
 
+
+lang = 'English'
+tag = 'kan-bayashi/ljspeech_vits'
+vocoder_tag = "none"
+text2speech = Text2Speech.from_pretrained(
+    model_tag=str_or_none(tag),
+    vocoder_tag=str_or_none(vocoder_tag),
+    device="cpu",
+    threshold=0.5,
+    minlenratio=0.0,
+    maxlenratio=10.0,
+    use_att_constraint=False,
+    backward_window=1,
+    forward_window=3,
+    speed_control_alpha=1.0,
+    noise_scale=0.333,
+    noise_scale_dur=0.333,
+)
 
 reversed_tag = ""
 ref_tag = False
@@ -86,8 +106,10 @@ def get_speech():
         trans = english_text(model=model_sr_en, processor=processor_sr_en)
         bot_response, reversed_tag, ref_tag = get_response(trans, model=en_chatbot_model, intents=en_intents, words=en_words,
                                     classes=en_classes , reversed_tag=reversed_tag, final_tag=ref_tag,T = False)
-        waveforms = english_speech(device, processor, tacotron2, vocoder, bot_response)
-        torchaudio.save("demo.wav", waveforms[0:1].cpu(), sample_rate=vocoder.sample_rate)
+        #waveforms = english_speech(device, processor, tacotron2, vocoder, bot_response)
+        with torch.no_grad():
+   		wav = text2speech(bot_response)["wav"]
+	torchaudio.save("demo.wav", wav.unsqueeze(0).cpu(), sample_rate=19000)
 
     return jsonify({"message":"http://209.51.170.248:5000/files/sample.wav"})
 
